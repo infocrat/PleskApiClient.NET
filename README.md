@@ -9,6 +9,7 @@ PleskApiClient client = new PleskApiClient("host.com", "admin", "password");
 Now it supports pure functionality:
  - Customers
  - Subscriptions
-
+```
 Customer customer = new Customer();
 client.Customers.Add(customer);
+```
