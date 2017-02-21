@@ -1,6 +1,6 @@
 # Plesk API C# client
 
-### Project website: <a href="https://infocrat.github.io/PleskApiClient.NET/">https://infocrat.github.io/PleskApiClient.NET/</a>
+#### Project website: <a target="_blank" href="https://infocrat.github.io/PleskApiClient.NET/">https://infocrat.github.io/PleskApiClient.NET/</a>
 ### Start guide
 1. Create client object
 PleskApiClient 
