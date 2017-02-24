@@ -88,17 +88,22 @@ in name is empty. Incorrect fields: "login".*/
         {
             CustomerGetResponse result = new CustomerGetResponse();
 
-            result.Status = message.Descendants("status").FirstOrDefault().Value.ToLower().Equals("ok") ? PleskApiResponseStatus.Ok : PleskApiResponseStatus.Error;
+            result.Status = message.Descendants("status").FirstOrDefault().Value.Equals("ok", StringComparison.OrdinalIgnoreCase) ? PleskApiResponseStatus.Ok : PleskApiResponseStatus.Error;
             result.ErrorCode = message.Descendants("errcode").FirstOrDefault()?.Value;
             result.ErrorText = message.Descendants("errtext").FirstOrDefault()?.Value;
 
-            if (message.Descendants("result").Any())
-                result.Customers = message.Descendants("result")
-                                            .Select(r => Customer.FromXml(r.Descendants("gen_info").FirstOrDefault().Descendants().ToList()))
-                                            .ToList();
+            if (result.Status == PleskApiResponseStatus.Ok)
+                if (message.Descendants("data").Any())
+                {
+                    if (message.Descendants("result").Any())
+                        result.Customers = message.Descendants("result")
+                                                .Where(r => r.Descendants("gen_info").Any())
+                                                .Select(r => Customer.FromXml(r.Descendants("gen_info").FirstOrDefault().Descendants().ToList()))
+                                                .ToList();
 
-            result.CustomerId = Convert.ToInt32(message.Descendants("id").FirstOrDefault()?.Value);
-            result.CustomerGuid = message.Descendants("guid").FirstOrDefault()?.Value;
+                    result.CustomerId = Convert.ToInt32(message.Descendants("id").FirstOrDefault()?.Value);
+                    result.CustomerGuid = message.Descendants("guid").FirstOrDefault()?.Value;
+                }
 
             return result;
         }
